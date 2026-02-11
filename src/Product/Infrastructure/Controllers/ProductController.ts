@@ -1,5 +1,6 @@
 import { GetAllProductsUseCase } from '@/Product/Application/UseCases/Get/GetAllProductsUseCase';
 import { GetProductByIdUseCase } from '@/Product/Application/UseCases/Get/GetProductByIdUseCase';
+import { Logger } from '@/Shared/Infrastructure/Logger';
 import type { Product } from '@/Product/Domain/Product';
 
 /**
@@ -45,8 +46,7 @@ export class ProductController {
         try {
             return await this.getAllProductsUseCase.execute();
         } catch (error) {
-            // Aquí podrías agregar logging, métricas, etc.
-            console.error('[ProductController] Error al obtener productos:', error);
+            Logger.error('Error getting all products', error);
             throw error; // Re-lanza para que el store lo maneje
         }
     }
@@ -62,7 +62,7 @@ export class ProductController {
         try {
             return await this.getProductByIdUseCase.execute(id);
         } catch (error) {
-            console.error(`[ProductController] Error al obtener producto ${id}:`, error);
+            Logger.error(`Error getting product with ID ${id}`, error);
             throw error;
         }
     }

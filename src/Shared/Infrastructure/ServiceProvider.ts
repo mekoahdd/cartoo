@@ -1,3 +1,5 @@
+import { Logger } from './Logger';
+
 /**
  * ServiceProvider - Gestiona la inyección de dependencias
  *
@@ -26,7 +28,7 @@ class ServiceProviderClass {
    */
   register<T>(key: string, implementation: T): void {
     if (this.services.has(key)) {
-      console.warn(`Service "${key}" ya está registrado. Se sobrescribirá.`);
+      Logger.warn(`Service "${key}" is already registered. It will be overwritten.`);
     }
     this.services.set(key, implementation);
   }
