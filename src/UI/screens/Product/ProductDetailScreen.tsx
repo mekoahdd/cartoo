@@ -80,7 +80,10 @@ export const ProductDetailScreen = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8">
                             {/* Images Column */}
                             <div>
-                                <ProductCarousel images={selectedProduct.images ?? []} />
+                                <ProductCarousel 
+                                    images={selectedProduct.images ?? []} 
+                                    productTitle={selectedProduct.title}
+                                />
                             </div>
 
                             {/* Info Column */}

@@ -2,6 +2,13 @@ import { ApolloClient, InMemoryCache, HttpLink, gql, OperationVariables } from '
 import type { DocumentNode } from 'graphql';
 
 /**
+ * GraphQLError type guard for standard Error instances
+ */
+function isError(error: unknown): error is Error {
+    return error instanceof Error;
+}
+
+/**
  * GraphQLService - Servicio de infraestructura para GraphQL
  * 
  * Encapsula Apollo Client y proporciona métodos de alto nivel para ejecutar queries.
@@ -104,11 +111,12 @@ export class GraphQLService {
             }
 
             return result.data;
-        } catch (error: any) {
-            console.error('GraphQL Query Error:', error);
+        } catch (error: unknown) {
+            const errorMessage = isError(error) ? error.message : String(error);
+            console.error('GraphQL Query Error:', errorMessage);
             
             // Mejorar mensajes de error
-            if (error.message?.includes('Network error') || error.message?.includes('Failed to fetch')) {
+            if (errorMessage.includes('Network error') || errorMessage.includes('Failed to fetch')) {
                 // Si hay error de red, intentar con caché
                 console.warn('Network error detected, attempting to use cached data...');
                 
@@ -125,7 +133,8 @@ export class GraphQLService {
                         return cachedResult.data;
                     }
                 } catch (cacheError) {
-                    console.error('No cached data available:', cacheError);
+                    const cacheErrorMsg = cacheError instanceof Error ? cacheError.message : 'Unknown cache error';
+                    console.error('No cached data available:', cacheErrorMsg);
                 }
                 
                 throw new Error('Unable to connect to the server. Please check your internet connection and try again.');

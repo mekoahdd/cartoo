@@ -34,7 +34,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
     onRetry
 }) => {
     return (
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-4 sm:mb-6" role="alert" aria-live="assertive">
             <Message
                 severity="error"
                 text={
@@ -47,6 +47,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
                             <button
                                 onClick={onRetry}
                                 className="mt-2 text-xs sm:text-sm underline hover:no-underline"
+                                aria-label={`Retry: ${title || message}`}
                             >
                                 Try again
                             </button>

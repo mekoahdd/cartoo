@@ -11,6 +11,12 @@
  *   }
  * }
  */
+
+// Type declaration for V8 stack trace support
+interface ErrorConstructor {
+  captureStackTrace?(target: object, constructorOpt?: Function): void;
+}
+
 export class CustomException extends Error {
   public readonly statusCode: number;
   public readonly timestamp: Date;
@@ -22,8 +28,9 @@ export class CustomException extends Error {
     this.timestamp = new Date();
     
     // Mantiene el stack trace correcto (solo en entornos V8 como Node.js/Chrome)
-    if (typeof (Error as any).captureStackTrace === 'function') {
-      (Error as any).captureStackTrace(this, this.constructor);
+    const ErrorConstructor = Error as ErrorConstructor;
+    if (typeof ErrorConstructor.captureStackTrace === 'function') {
+      ErrorConstructor.captureStackTrace(this, this.constructor);
     }
   }
 

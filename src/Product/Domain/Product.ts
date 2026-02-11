@@ -1,3 +1,5 @@
+import { ProductData, ProductCategory } from './Types/ProductTypes';
+
 /**
  * Product - Entidad del dominio
  * 
@@ -15,24 +17,9 @@ export class Product {
     private readonly _price: number;
     private readonly _description?: string;
     private readonly _images?: string[];
-    private readonly _category?: {
-        id: number;
-        name: string;
-        image: string;
-    };
+    private readonly _category?: ProductCategory;
 
-    constructor(data: {
-        id: number;
-        title: string;
-        price: number;
-        description?: string;
-        images?: string[];
-        category?: {
-            id: number;
-            name: string;
-            image: string;
-        };
-    }) {
+    constructor(data: ProductData) {
         this._id = data.id;
         this._title = data.title;
         this._price = data.price;

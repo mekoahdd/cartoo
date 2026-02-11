@@ -1,6 +1,7 @@
 import { ServiceProvider } from '@/Shared/Infrastructure/ServiceProvider';
 import { GraphQLService } from '@/Product/Infrastructure/Services/GraphQLService';
 import { ProductRepository } from '@/Product/Infrastructure/Repositories/ProductRepository';
+import { SERVICE_KEYS } from '@/Shared/Constants/ServiceKeys';
 import type { ProductRepositoryContract } from '@/Product/Domain/Contracts/ProductRepositoryContract';
 
 /**
@@ -31,19 +32,33 @@ import type { ProductRepositoryContract } from '@/Product/Domain/Contracts/Produ
 const GRAPHQL_API_URL = process.env.VITE_GRAPHQL_API_URL;
 
 /**
+ * Validates that required environment variables are present
+ */
+function validateEnvironment(): void {
+    if (!GRAPHQL_API_URL) {
+        throw new Error(
+            'Missing required environment variable: VITE_GRAPHQL_API_URL. ' +
+            'Please check your .env file.'
+        );
+    }
+}
+
+/**
  * Registra todos los servicios y dependencias de la aplicación
  */
 export function registerDependencies(): void {
+    // Validate environment first
+    validateEnvironment();
+
     // 1. Crear instancia del servicio GraphQL
-    const graphQLService = new GraphQLService(GRAPHQL_API_URL);
+    const graphQLService = new GraphQLService(GRAPHQL_API_URL!);
 
     // 2. Crear instancia del repositorio de productos
     const productRepository = new ProductRepository(graphQLService);
 
-    // 3. Registrar el repositorio en el ServiceProvider
-    // La key 'ProductRepository' es la que usarán los casos de uso para resolver
+    // 3. Registrar el repositorio en el ServiceProvider usando constantes
     ServiceProvider.register<ProductRepositoryContract>(
-        'ProductRepository',
+        SERVICE_KEYS.PRODUCT_REPOSITORY,
         productRepository
     );
 
