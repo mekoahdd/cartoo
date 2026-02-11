@@ -2,6 +2,7 @@ import { ServiceProvider } from '@/Shared/Infrastructure/ServiceProvider';
 import { GraphQLService } from '@/Product/Infrastructure/Services/GraphQLService';
 import { ProductRepository } from '@/Product/Infrastructure/Repositories/ProductRepository';
 import { SERVICE_KEYS } from '@/Shared/Constants/ServiceKeys';
+import { Logger } from '@/Shared/Infrastructure/Logger';
 import type { ProductRepositoryContract } from '@/Product/Domain/Contracts/ProductRepositoryContract';
 
 /**
@@ -62,7 +63,7 @@ export function registerDependencies(): void {
         productRepository
     );
 
-    console.log('✅ Dependencies registered successfully');
+    Logger.info('Dependencies registered successfully');
 }
 
 /**
@@ -70,7 +71,7 @@ export function registerDependencies(): void {
  * Llama a todas las funciones de inicialización necesarias
  */
 export function initializeApp(): void {
-    console.log('🚀 Initializing application...');
+    Logger.info('Initializing application...');
 
     try {
         // Registrar dependencias
@@ -82,9 +83,9 @@ export function initializeApp(): void {
         // - Configurar i18n
         // - etc.
 
-        console.log('✅ Application initialized successfully');
+        Logger.info('Application initialized successfully');
     } catch (error) {
-        console.error('❌ Failed to initialize application:', error);
+        Logger.error('Failed to initialize application', error);
         throw error;
     }
 }
@@ -95,5 +96,5 @@ export function initializeApp(): void {
  */
 export function cleanupDependencies(): void {
     ServiceProvider.clear();
-    console.log('🧹 Dependencies cleared');
+    Logger.info('Dependencies cleared');
 }

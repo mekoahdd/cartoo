@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink, gql, OperationVariables } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
+import { Logger } from '@/Shared/Infrastructure/Logger';
 
 /**
  * GraphQLError type guard for standard Error instances
@@ -113,12 +114,12 @@ export class GraphQLService {
             return result.data;
         } catch (error: unknown) {
             const errorMessage = isError(error) ? error.message : String(error);
-            console.error('GraphQL Query Error:', errorMessage);
+            Logger.error('GraphQL Query Error', errorMessage);
             
             // Mejorar mensajes de error
             if (errorMessage.includes('Network error') || errorMessage.includes('Failed to fetch')) {
                 // Si hay error de red, intentar con caché
-                console.warn('Network error detected, attempting to use cached data...');
+                Logger.warn('Network error detected, attempting to use cached data...');
                 
                 try {
                     // Intentar obtener datos del caché de Apollo
@@ -129,18 +130,18 @@ export class GraphQLService {
                     });
                     
                     if (cachedResult.data) {
-                        console.info('Using cached data (offline mode)');
+                        Logger.info('Using cached data (offline mode)');
                         return cachedResult.data;
                     }
                 } catch (cacheError) {
                     const cacheErrorMsg = cacheError instanceof Error ? cacheError.message : 'Unknown cache error';
-                    console.error('No cached data available:', cacheErrorMsg);
+                    Logger.error('No cached data available', cacheErrorMsg);
                 }
                 
                 throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
             }
             
-            if (error.message?.includes('timeout')) {
+            if (errorMessage.includes('timeout')) {
                 throw new Error('Request timed out. The server is taking too long to respond.');
             }
             
