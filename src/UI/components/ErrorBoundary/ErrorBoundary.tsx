@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Button } from 'primereact/button';
+import { Logger } from '@/Shared/Infrastructure/Logger';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -45,8 +46,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        // Log error to console (in production, you'd send to error tracking service)
-        console.error('ErrorBoundary caught an error:', error, errorInfo);
+        // Log error using centralized Logger service
+        Logger.error('ErrorBoundary caught an error', { error, errorInfo });
         
         this.setState({
             error,
@@ -54,7 +55,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         });
 
         // In production, you might want to send to error tracking service:
-        // logErrorToService(error, errorInfo);
+        // sendToErrorTrackingService(error, errorInfo);
     }
 
     handleReset = (): void => {
