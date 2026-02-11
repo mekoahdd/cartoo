@@ -1,4 +1,5 @@
 import { ServiceProvider } from '@/Shared/Infrastructure/ServiceProvider';
+import { SERVICE_KEYS } from '@/Shared/Constants/ServiceKeys';
 import type { ProductRepositoryContract } from '@/Product/Domain/Contracts/ProductRepositoryContract';
 import type { Product } from '@/Product/Domain/Product';
 
@@ -22,10 +23,9 @@ export class GetAllProductsUseCase {
     private productRepository: ProductRepositoryContract;
 
     constructor() {
-        // Resuelve la dependencia desde el ServiceProvider
-        // El repositorio concreto se registra en el bootstrap de la app
+        // Resuelve la dependencia desde el ServiceProvider usando constantes
         this.productRepository = ServiceProvider.resolve<ProductRepositoryContract>(
-            'ProductRepository'
+            SERVICE_KEYS.PRODUCT_REPOSITORY
         );
     }
 

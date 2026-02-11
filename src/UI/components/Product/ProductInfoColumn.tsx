@@ -1,9 +1,15 @@
+import { Product } from '../../../Product/Domain/Product';
+
+interface ProductInfoColumnProps {
+    product: Product;
+}
+
 /**
  * ProductInfoColumn - Componente para mostrar información del producto
  * Props:
  * - product: Product
  */
-export const ProductInfoColumn = ({ product }: { product: any }) => (
+export const ProductInfoColumn = ({ product }: ProductInfoColumnProps) => (
     <div className="flex flex-col">
         <div className="mb-4">
             {product.category && (

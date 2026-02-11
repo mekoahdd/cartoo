@@ -24,11 +24,17 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     message = 'Loading...'
 }) => {
     return (
-        <div className="flex flex-col justify-center items-center py-12">
+        <div 
+            className="flex flex-col justify-center items-center py-12"
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+        >
             <ProgressSpinner
                 style={{ width: '50px', height: '50px' }}
                 strokeWidth="4"
                 animationDuration="1s"
+                aria-label={message}
             />
             {message && (
                 <p className="mt-4 text-gray-600 text-sm">

@@ -5,9 +5,10 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'node_modules']),
   {
     files: ['**/*.{js,jsx}'],
+    ignores: ['webpack.config.js', 'postcss.config.js', 'tailwind.config.js', 'scripts/**/*.js'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -24,6 +25,30 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+  // Configuration files with Node.js environment
+  {
+    files: ['webpack.config.js', 'postcss.config.js', 'tailwind.config.js', 'scripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        __dirname: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        Buffer: 'readonly',
+      },
+      sourceType: 'commonjs',
+    },
+  },
+  // Service worker with Web Worker globals
+  {
+    files: ['src/service-worker.js'],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+        clients: 'readonly',
+      },
     },
   },
 ])

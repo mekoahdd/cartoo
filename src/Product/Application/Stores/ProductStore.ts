@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Logger } from '@/Shared/Infrastructure/Logger';
 import { GetAllProductsUseCase } from '../UseCases/Get/GetAllProductsUseCase';
 import { GetProductByIdUseCase } from '../UseCases/Get/GetProductByIdUseCase';
 
@@ -89,7 +90,7 @@ export const useProductStore = create<ProductState>((set) => ({
                 products: []
             });
 
-            console.error('Error fetching products:', error);
+            Logger.error('Error fetching products', error);
         }
     },
 
@@ -119,7 +120,7 @@ export const useProductStore = create<ProductState>((set) => ({
                 selectedProduct: null
             });
 
-            console.error(`Error fetching product ${id}:`, error);
+            Logger.error(`Error fetching product ${id}`, error);
         }
     },
 

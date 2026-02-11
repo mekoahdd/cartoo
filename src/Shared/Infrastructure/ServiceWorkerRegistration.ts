@@ -1,3 +1,5 @@
+import { Logger } from './Logger';
+
 /**
  * Service Worker Registration
  * 
@@ -17,7 +19,7 @@ export function registerServiceWorker() {
             navigator.serviceWorker
                 .register('/service-worker.js')
                 .then((registration) => {
-                    console.log('✅ Service Worker registered successfully:', registration);
+                    Logger.info('Service Worker registered successfully');
 
                     // Check for updates periodically
                     setInterval(() => {
@@ -31,7 +33,7 @@ export function registerServiceWorker() {
                         newWorker?.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                 // New service worker available
-                                console.log('🔄 New version available! Refresh to update.');
+                                Logger.info('New version available! Refresh to update.');
                                 
                                 // Optional: Show update notification to user
                                 if (confirm('New version available! Reload to update?')) {
@@ -43,19 +45,19 @@ export function registerServiceWorker() {
                     });
                 })
                 .catch((error) => {
-                    console.error('❌ Service Worker registration failed:', error);
+                    Logger.error('Service Worker registration failed', error);
                 });
 
             // Listen for messages from service worker
             navigator.serviceWorker.addEventListener('message', (event) => {
                 if (event.data && event.data.type === 'SW_ACTIVATED') {
-                    console.log('✅ Service Worker activated:', event.data.message);
+                    Logger.info('Service Worker activated', event.data.message);
                 }
             });
 
             // Handle controller change (new SW activated)
             navigator.serviceWorker.addEventListener('controllerchange', () => {
-                console.log('🔄 New Service Worker activated, reloading page...');
+                Logger.info('New Service Worker activated, reloading page...');
                 window.location.reload();
             });
         });
@@ -70,10 +72,10 @@ export function unregisterServiceWorker() {
         navigator.serviceWorker.ready
             .then((registration) => {
                 registration.unregister();
-                console.log('✅ Service Worker unregistered');
+                Logger.info('Service Worker unregistered');
             })
             .catch((error) => {
-                console.error('❌ Service Worker unregister failed:', error);
+                Logger.error('Service Worker unregister failed', error);
             });
     }
 }

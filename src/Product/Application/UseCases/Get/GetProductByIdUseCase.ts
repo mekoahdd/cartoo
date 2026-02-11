@@ -1,4 +1,5 @@
 import { ServiceProvider } from '@/Shared/Infrastructure/ServiceProvider';
+import { SERVICE_KEYS } from '@/Shared/Constants/ServiceKeys';
 import type { ProductRepositoryContract } from '@/Product/Domain/Contracts/ProductRepositoryContract';
 import type { Product } from '@/Product/Domain/Product';
 import { ProductNotFoundException } from '@/Product/Domain/Exceptions/ProductNotFoundException';
@@ -23,7 +24,7 @@ export class GetProductByIdUseCase {
 
     constructor() {
         this.productRepository = ServiceProvider.resolve<ProductRepositoryContract>(
-            'ProductRepository'
+            SERVICE_KEYS.PRODUCT_REPOSITORY
         );
     }
 

@@ -5,6 +5,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import App from './App';
 import { initializeApp } from './bootstrap';
 import { registerServiceWorker } from '@/Shared/Infrastructure/ServiceWorkerRegistration';
+import { ErrorBoundary } from '@/UI/components/ErrorBoundary';
 import './index.css';
 
 // Importar estilos de PrimeReact
@@ -18,7 +19,7 @@ import 'primeicons/primeicons.css';
  * Flujo de inicialización:
  * 1. Inicializar bootstrap (registrar dependencias)
  * 2. Configurar providers (PrimeReact, Router)
- * 3. Renderizar App
+ * 3. Renderizar App con ErrorBoundary
  */
 
 // Inicializar la aplicación (registro de dependencias)
@@ -34,14 +35,16 @@ if (!rootElement) {
 // Crear root de React 19
 const root = createRoot(rootElement);
 
-// Renderizar la aplicación
+// Renderizar la aplicación con ErrorBoundary
 root.render(
     <StrictMode>
-        <PrimeReactProvider>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </PrimeReactProvider>
+        <ErrorBoundary>
+            <PrimeReactProvider>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </PrimeReactProvider>
+        </ErrorBoundary>
     </StrictMode>
 );
 
